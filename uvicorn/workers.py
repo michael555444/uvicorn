@@ -88,10 +88,10 @@ class UvicornWorker(Worker):
 
     async def _serve(self) -> None:
         self.config.app = self.wsgi
-        server = Server(config=self.config)
+        self.server = Server(config=self.config)
         self._install_sigquit_handler()
-        await server.serve(sockets=self.sockets)
-        if not server.started:
+        await self.server.serve(sockets=self.sockets)
+        if not self.server.started:
             sys.exit(Arbiter.WORKER_BOOT_ERROR)
 
     def run(self) -> None:
